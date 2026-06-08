@@ -1,0 +1,13 @@
+---
+- name: MySQLをインストール
+  ansible.builtin.apt:
+    name:
+      - mysql-server
+      - python3-pymysql
+    state: present
+
+- name: MySQLを起動・自動起動設定
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes

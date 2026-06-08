@@ -1,0 +1,25 @@
+---
+- name: Nginxをインストール
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Nginxを起動・自動起動設定
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: カスタムHTMLを配置
+  ansible.builtin.copy:
+    content: |
+      <!DOCTYPE html>
+      <html>
+      <head><meta charset="UTF-8"><title>Ansible Practice v2</title></head>
+      <body>
+        <h1>Hello from Ansible v2!</h1>
+        <p>ロールを使ったAnsibleの設定です。</p>
+      </body>
+      </html>
+    dest: /var/www/html/index.html
+    

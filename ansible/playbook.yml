@@ -1,0 +1,12 @@
+---
+- hosts: web
+  become: yes
+  roles:
+    - common
+    - nginx
+
+- hosts: db
+  become: yes
+  roles:
+    - common
+    - mysql
