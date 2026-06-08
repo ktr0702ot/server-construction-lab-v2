@@ -1,0 +1,7 @@
+# Vagrant
+vagrant/.vagrant/
+
+# terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
