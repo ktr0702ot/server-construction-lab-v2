@@ -4,9 +4,18 @@
   roles:
     - common
     - nginx
+    - node_exporter
 
 - hosts: db
   become: yes
   roles:
     - common
     - mysql
+    - node_exporter
+
+- hosts: monitor
+  become: yes
+  roles:
+    - common
+    - monitor
+    - grafana

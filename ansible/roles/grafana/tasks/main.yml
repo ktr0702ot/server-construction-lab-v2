@@ -1,0 +1,23 @@
+---
+- name: GrafanaのGPGキーを追加
+  ansible.builtin.apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
+
+- name: Grafanaリポジトリを追加
+  ansible.builtin.apt_repository:
+    repo: deb https://packages.grafana.com/oss/deb stable main
+    state: present
+
+- name: Grafanaをインストール
+  ansible.builtin.apt:
+    name: grafana
+    state: present
+    update_cache: yes
+
+- name: Grafanaを起動・自動起動設定
+  ansible.builtin.service:
+    name: grafana-server
+    state: started
+    enabled: yes
+    

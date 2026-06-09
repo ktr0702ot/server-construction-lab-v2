@@ -1,0 +1,47 @@
+---
+- name: node_exporterユーザーを作成
+  ansible.builtin.user:
+    name: node_exporter
+    system: yes
+    shell: /bin/false
+
+- name: node_exporterをダウンロード
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+    dest: /tmp/node_exporter.tar.gz
+
+- name: node_exporterを展開
+  ansible.builtin.unarchive:
+    src: /tmp/node_exporter.tar.gz
+    dest: /tmp/
+    remote_src: yes
+
+- name: node_exporterをインストール
+  ansible.builtin.copy:
+    src: /tmp/node_exporter-1.7.0.linux-amd64/node_exporter
+    dest: /usr/local/bin/node_exporter
+    mode: '0755'
+    remote_src: yes
+  
+- name: systemdサービスファイルを作成
+  ansible.builtin.copy:
+    content: |
+      [Unit]
+      Description=Node exporter
+      After=network.target
+
+      [Service]
+      User=node_exporter
+      ExecStart=/usr/local/bin/node_exporter
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/node_exporter.service
+
+- name: node_exporterを自動起動・自動起動設定
+  ansible.builtin.systemd:
+    name: node_exporter
+    state: started
+    enabled: yes
+    daemon_reload: yes
+    
