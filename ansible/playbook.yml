@@ -5,6 +5,7 @@
     - common
     - nginx
     - node_exporter
+    - filebeat
 
 - hosts: db
   become: yes
@@ -12,6 +13,7 @@
     - common
     - mysql
     - node_exporter
+    - filebeat
 
 - hosts: monitor
   become: yes
@@ -19,3 +21,6 @@
     - common
     - monitor
     - grafana
+    - elasticsearch
+    - kibana
+    

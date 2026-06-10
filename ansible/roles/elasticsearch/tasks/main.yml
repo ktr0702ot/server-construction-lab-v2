@@ -1,0 +1,36 @@
+---
+- name: ElasticのGPGキーを追加
+  ansible.builtin.apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+  
+- name: Elasticsearchリポジトリを追加
+  ansible.builtin.apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
+    state: present
+
+- name: Elasticsearchをインストール
+  ansible.builtin.apt:
+    name: elasticsearch
+    state: present
+    update_cache: yes
+
+- name: Elasticsearch設定ファイルを更新
+  ansible.builtin.copy:
+    content: | 
+      cluster.name: lab-cluster
+      node.name: monitor01
+      network.host: 0.0.0.0
+      http.port: 9200
+      discovery.type: single-node
+      xpack.security.enabled: false
+      xpack.security.http.ssl.enabled: false
+      xpack.security.transport.ssl.enabled: false
+    dest: /etc/elasticsearch/elasticsearch.yml
+
+- name: Elasticsearchを起動・自動起動設定
+  ansible.builtin.systemd:
+    name: elasticsearch
+    state: started
+    enabled: yes
+    daemon_reload: yes

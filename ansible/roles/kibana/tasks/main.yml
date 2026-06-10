@@ -1,0 +1,20 @@
+---
+- name: Kibanaをインストール
+  ansible.builtin.apt:
+    name: kibana
+    state: present
+
+- name: Kibana設定ファイルを更新
+  ansible.builtin.copy:
+    content: |
+      server.port: 5601
+      server.host: "0.0.0.0"
+      elasticsearch.hosts: ["http://localhost:9200"]
+    dest: /etc/kibana/kibana.yml
+
+- name: Kibanaを起動・自動起動設定
+  ansible.builtin.systemd:
+    name: kibana
+    state: started
+    enabled: yes
+    daemon_reload: yes
